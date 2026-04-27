@@ -10,14 +10,6 @@ export default function Navbar({ titulo, voltar, acoes }) {
           ←
         </button>
       )}
-      {!voltar && (
-        <img
-          src="icon-192.png"
-          alt="Rota Vistoria"
-          className="w-8 h-8 rounded-lg object-cover"
-          onError={(e) => { e.target.style.display='none' }}
-        />
-      )}
       <h1 className="text-white font-bold text-lg flex-1 truncate">{titulo || 'Rota Vistoria'}</h1>
       {acoes && <div className="flex gap-2">{acoes}</div>}
     </header>
