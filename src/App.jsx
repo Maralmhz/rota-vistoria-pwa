@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import DetalheOficina from './pages/DetalheOficina'
@@ -6,6 +6,7 @@ import CadastroOficina from './pages/CadastroOficina'
 import CadastroVeiculo from './pages/CadastroVeiculo'
 import DetalheVeiculo from './pages/DetalheVeiculo'
 import Backup from './pages/Backup'
+import { popularDadosIniciais } from './db/seed'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -32,6 +33,10 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function App() {
+  useEffect(() => {
+    popularDadosIniciais()
+  }, [])
+
   return (
     <ErrorBoundary>
       <Routes>
