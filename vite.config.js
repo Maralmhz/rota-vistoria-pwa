@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/rota-vistoria-pwa/',
+  base: process.env.GITHUB_ACTIONS ? '/rota-vistoria-pwa/' : '/',
   plugins: [
     react(),
   ],
