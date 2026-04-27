@@ -28,7 +28,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /^https://.*/i,
+            urlPattern: ({ url }) => url.protocol === 'https:',
             handler: 'NetworkFirst',
             options: { cacheName: 'external-cache', networkTimeoutSeconds: 10 }
           }
