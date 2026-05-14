@@ -72,9 +72,9 @@ export default function Home() {
           <CardOficina
             key={o.id}
             oficina={o}
+            onPress={() => navigate(`/oficina/${o.id}`)}
             onEditar={() => navigate(`/oficina/${o.id}/editar`)}
-            onRemover={() => confirmarDelecao(o)}
-            onClick={() => navigate(`/oficina/${o.id}`)}
+            onDeletar={() => confirmarDelecao(o)}
           />
         ))}
       </div>
