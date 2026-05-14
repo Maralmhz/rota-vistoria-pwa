@@ -72,14 +72,13 @@ export default function Home() {
           <CardOficina
             key={o.id}
             oficina={o}
-            onEditar={() => navigate(`/editar-oficina/${o.id}`)}
+            onEditar={() => navigate(`/oficina/${o.id}/editar`)}
             onRemover={() => confirmarDelecao(o)}
             onClick={() => navigate(`/oficina/${o.id}`)}
           />
         ))}
       </div>
 
-      {/* Botoes de acao fixos no rodape */}
       <div className="fixed bottom-0 left-0 right-0 bg-secondary border-t border-tertiary flex z-40">
         <button
           onClick={() => navigate('/backup')}
@@ -97,7 +96,7 @@ export default function Home() {
         </button>
       </div>
 
-      <BotaoFlutuante onClick={() => navigate('/cadastrar-oficina')} />
+      <BotaoFlutuante onClick={() => navigate('/oficina/nova')} />
     </div>
   )
 }
