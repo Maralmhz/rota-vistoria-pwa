@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { buscarVeiculoPorId, salvarVeiculo } from '../db/database'
+import { getVeiculo, criarVeiculo, atualizarVeiculo } from '../lib/api'
 import InputCampo from '../components/InputCampo'
 import Navbar from '../components/Navbar'
 
@@ -20,7 +20,7 @@ export default function CadastroVeiculo() {
 
   useEffect(() => {
     if (editando) {
-      buscarVeiculoPorId(id).then(v => {
+                  getVeiculo(id).then(v => {
         if (v) { setForm({ ...v }); setNomeOficina(v.oficina_nome || '') }
       })
     }
@@ -31,7 +31,7 @@ export default function CadastroVeiculo() {
   const handleSalvar = async () => {
     if (!form.modelo || !form.placa || !form.nome_proprietario) return alert('Modelo, placa e proprietário são obrigatórios.')
     setSalvando(true)
-    await salvarVeiculo({ ...form, placa: form.placa.toUpperCase() }, editando ? id : null)
+        editando ? await atualizarVeiculo(id, { ...form, placa: form.placa.toUpperCase() }) : await criarVeiculo({ ...form, placa: form.placa.toUpperCase() })
     setSalvando(false)
     navigate(-1)
   }
