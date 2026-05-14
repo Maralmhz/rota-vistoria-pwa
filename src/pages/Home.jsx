@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { buscarTodasOficinas, removerOficina, buscarCidades } from '../db/database'
+import { buscarTodasOficinas, removerOficina, buscarCidades } from '../lib/api'
 import CardOficina from '../components/CardOficina'
 import BotaoFlutuante from '../components/BotaoFlutuante'
 import Navbar from '../components/Navbar'
