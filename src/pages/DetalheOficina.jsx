@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { buscarOficinaPorId, buscarVeiculosPorOficina, removerVeiculo } from '../db/database'
+import { getOficinaPorId, getVeiculosPorOficina, deletarVeiculo } from '../lib/api'
 import CardVeiculo from '../components/CardVeiculo'
 import BotaoFlutuante from '../components/BotaoFlutuante'
 import Navbar from '../components/Navbar'
@@ -15,9 +15,9 @@ export default function DetalheOficina() {
   const [busca, setBusca] = useState('')
 
   const carregar = async () => {
-    const o = await buscarOficinaPorId(id)
+        const o = await getOficinaPorId(id)
     setOficina(o)
-    const v = await buscarVeiculosPorOficina(id, busca)
+        const v = await getVeiculosPorOficina(id, busca)
     setVeiculos(v)
   }
 
@@ -25,7 +25,7 @@ export default function DetalheOficina() {
 
   const confirmarDelecao = async (v) => {
     if (window.confirm(`Remover ${v.modelo} (${v.placa})?`)) {
-      await removerVeiculo(v.id)
+            await deletarVeiculo(v.id)
       carregar()
     }
   }
