@@ -11,9 +11,9 @@ export default function Navbar({ titulo, voltar, acoes }) {
         </button>
       ) : (
         <img
-          src="/rota-vistoria-pwa/icon-192.jpg"
-          alt="Logo"
-          className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
+          src="/logo.png"
+          alt="Rota Vistoria"
+          className="h-8 w-auto object-contain flex-shrink-0"
         />
       )}
       <h1 className="text-white font-bold text-lg flex-1 truncate">{titulo || 'Rota Vistoria'}</h1>
