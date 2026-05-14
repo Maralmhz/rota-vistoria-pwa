@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { buscarOficinaPorId, salvarOficina } from '../db/database'
+import { getOficinaPorId, criarOficina, atualizarOficina } from '../lib/api'
 import InputCampo from '../components/InputCampo'
 import Navbar from '../components/Navbar'
 
@@ -12,7 +12,7 @@ export default function CadastroOficina() {
   const [salvando, setSalvando] = useState(false)
 
   useEffect(() => {
-    if (editando) buscarOficinaPorId(id).then(o => o && setForm({ nome: o.nome, endereco: o.endereco, cidade: o.cidade, estado: o.estado }))
+        if (editando) getOficinaPorId(id).then(o => o && setForm({ nome: o.nome, endereco: o.endereco, cidade: o.cidade, estado: o.estado }))
   }, [id])
 
   const set = (campo) => (e) => setForm(f => ({ ...f, [campo]: e.target.value }))
@@ -20,7 +20,7 @@ export default function CadastroOficina() {
   const handleSalvar = async () => {
     if (!form.nome || !form.endereco || !form.cidade || !form.estado) return alert('Preencha todos os campos obrigatórios.')
     setSalvando(true)
-    await salvarOficina({ ...form, estado: form.estado.toUpperCase() }, editando ? id : null)
+        editando ? await atualizarOficina(id, { ...form, estado: form.estado.toUpperCase() }) : await criarOficina({ ...form, estado: form.estado.toUpperCase() })
     setSalvando(false)
     navigate(-1)
   }
