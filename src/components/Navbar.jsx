@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import logoUrl from '../../logo.png'
 
 export default function Navbar({ titulo, voltar, acoes }) {
   const navigate = useNavigate()
@@ -11,7 +12,7 @@ export default function Navbar({ titulo, voltar, acoes }) {
         </button>
       ) : (
         <img
-          src="/logo.png"
+          src={logoUrl}
           alt="Rota Vistoria"
           className="h-8 w-auto object-contain flex-shrink-0"
         />
