@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { buscarVeiculoPorId } from '../db/database'
+import { getVeiculo } from '../lib/api'
 import { fundoBadgeStatus, textoDoStatus, bordaStatus } from '../utils/statusHelper'
 import { formatarData } from '../utils/formatadores'
 import Navbar from '../components/Navbar'
@@ -10,7 +10,7 @@ export default function DetalheVeiculo() {
   const navigate = useNavigate()
   const [veiculo, setVeiculo] = useState(null)
 
-  useEffect(() => { buscarVeiculoPorId(id).then(setVeiculo) }, [id])
+    useEffect(() => { getVeiculo(id).then(setVeiculo) }, [id])
 
   if (!veiculo) return <div className="min-h-dvh bg-primary flex items-center justify-center"><p className="text-slate-400">Carregando...</p></div>
 
