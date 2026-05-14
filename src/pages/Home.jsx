@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { buscarTodasOficinas, removerOficina, buscarCidades } from '../lib/api'
+import { getOficinas, deletarOficina } from '../lib/api'
 import CardOficina from '../components/CardOficina'
 import BotaoFlutuante from '../components/BotaoFlutuante'
 import Navbar from '../components/Navbar'
@@ -14,9 +14,9 @@ export default function Home() {
   const [menuAberto, setMenuAberto] = useState(false)
 
   const carregar = async () => {
-    const lista = await buscarTodasOficinas(cidadeFiltro)
+        const lista = await getOficinas(cidadeFiltro)
     setOficinas(lista)
-    const c = await buscarCidades()
+        const c = [...new Set(lista.map(o => o.cidade).filter(Boolean))]
     setCidades(c)
   }
 
@@ -28,7 +28,7 @@ export default function Home() {
 
   const confirmarDelecao = async (o) => {
     if (window.confirm(`Remover "${o.nome}" e todos os veículos?`)) {
-      await removerOficina(o.id)
+            await deletarOficina(o.id)
       carregar()
     }
   }
