@@ -1,4 +1,4 @@
-import { buscarTodasOficinas, buscarVeiculosPorOficina, buscarVeiculosAtrasados, db } from '../db/database'
+import { getOficinas, getVeiculosPorOficina, getVeiculosAtrasados, criarOficina, criarVeiculo } from '../lib/api'
 import { formatarData, gerarNomeArquivo } from './formatadores'
 
 const formatarVeiculo = (v) =>
@@ -23,16 +23,16 @@ const compartilharOuDownload = (texto, nomeArquivo) => {
 }
 
 export const exportarOficina = async (oficina) => {
-  const veiculos = await buscarVeiculosPorOficina(oficina.id)
+    const veiculos = await getVeiculosPorOficina(oficina.id)
   const texto = `🚗 ROTA VISTORIA — ${new Date().toLocaleString('pt-BR')}\n\n${formatarOficina(oficina, veiculos)}`
   compartilharOuDownload(texto, `oficina_${oficina.nome}.txt`)
 }
 
 export const exportarTodasOficinas = async () => {
-  const oficinas = await buscarTodasOficinas()
+    const oficinas = await getOficinas()
   let texto = `🚗 ROTA VISTORIA — Todas as Oficinas\nData: ${new Date().toLocaleString('pt-BR')}\n${'═'.repeat(40)}\n\n`
   for (const o of oficinas) {
-    const veiculos = await buscarVeiculosPorOficina(o.id)
+        const veiculos = await getVeiculosPorOficina(o.id)
     texto += formatarOficina(o, veiculos) + '\n' + '─'.repeat(40) + '\n\n'
   }
   texto += `Total de oficinas: ${oficinas.length}`
@@ -40,15 +40,15 @@ export const exportarTodasOficinas = async () => {
 }
 
 export const exportarAtrasados = async () => {
-  const veiculos = await buscarVeiculosAtrasados()
+    const veiculos = await getVeiculosAtrasados()
   let texto = `⚠️ ROTA VISTORIA — Veículos Atrasados\nData: ${new Date().toLocaleString('pt-BR')}\n${'═'.repeat(40)}\n\n`
   texto += veiculos.length === 0 ? 'Nenhum veículo atrasado. ✅' : `Total: ${veiculos.length}\n\n` + veiculos.map(v => `📍 ${v.oficina_nome} (${v.oficina_cidade})\n${formatarVeiculo(v)}`).join('\n\n')
   compartilharOuDownload(texto, 'atrasados.txt')
 }
 
 export const exportarBackup = async () => {
-  const oficinas = await db.oficinas.toArray()
-  const veiculos = await db.veiculos.toArray()
+    const oficinas = await getOficinas()
+    const veiculosArr = await Promise.all(oficinas.map(o => getVeiculosPorOficina(o.id))); const veiculos = veiculosArr.flat()
   const backup = { versao: '1.0', data: new Date().toISOString(), app: 'ROTA VISTORIA', oficinas, veiculos }
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
@@ -67,9 +67,9 @@ export const importarBackup = async (arquivo) => {
   let backup
   try { backup = JSON.parse(texto) } catch { throw new Error('Arquivo inválido') }
   if (!backup.oficinas || !backup.veiculos) throw new Error('Formato inválido')
-  await db.veiculos.clear()
-  await db.oficinas.clear()
-  await db.oficinas.bulkAdd(backup.oficinas)
-  await db.veiculos.bulkAdd(backup.veiculos)
+    for (const o of backup.oficinas) { const nova = await criarOficina(o); for (const v of backup.veiculos.filter(v => v.oficina_id === o.id)) { await criarVeiculo({ ...v, oficina_id: nova.id }) } }
+    // importação concluída via API
+    
+    
   return { totalOficinas: backup.oficinas.length, totalVeiculos: backup.veiculos.length }
 }
