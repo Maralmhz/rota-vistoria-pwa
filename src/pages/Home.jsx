@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="min-h-dvh bg-primary flex flex-col">
       <Navbar
-        titulo="🚗 Rota Vistoria"
+                titulo="Rota Vistoria"
         acoes={
           <button onClick={() => setMenuAberto(!menuAberto)} className="text-slate-400 text-2xl w-9 h-9 flex items-center justify-center rounded-full active:bg-tertiary">⋮</button>
         }
